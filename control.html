@@ -31,20 +31,46 @@
     background: #ffa200;
     color: #fff;
   }
+  .spin-btn {
+  	width: calc(50% - 45px);
+  	width: -webkit-calc(50% - 45px);
+  	display: inline-block;
+  	padding: 20px;
+  	text-align: center;
+    border: 1px solid #ddd;
+  }
+  #left_btn {
+    border-radius: 5px;
+    float: left;
+  }
+  #right_btn {
+    border-radius: 5px;
+    float: right;
+  }
   </style>
 </head>
 <body>
   <ul>
     <li><a href="#" class="mode-button" id="draw_btn">Draw</a></li>
     <li><a href="#" class="mode-button" id="erase_btn">Erase</a></li>
+    <li><a href="#" class="spin-btn" id="left_btn">
+    		<img src="rotate_left-icon.gif" />
+    	</a>
+    	<a href="#" class="spin-btn" id="right_btn">
+    		<img src="rotate_right-icon.gif" />
+    	</a>
+    	</li>
   </ul>
   <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
   <script type="text/javascript">
   var draw_btn = document.getElementById("draw_btn");
   var erase_btn = document.getElementById("erase_btn");
+  var left_btn = document.getElementById("left_btn");
+  var right_btn = document.getElementById("right_btn");
+  
   var lb_firebase = new Firebase(
       "https://lightboard.firebaseIO.com");
-  var room = lb_firebase.child("hackmit");
+  var room = lb_firebase.child("hackmit-victor");
   room.child("mode").on("value", function(data) {
     draw_btn.className = "mode-button ";
     erase_btn.className = "mode-button ";
@@ -73,6 +99,18 @@
       room.child("mode").set("erase");
     }
   };
+  left_btn.ontouchstart = function() {
+  	room.child("mode").set("leftspin");
+  };
+  left_btn.ontouchend = function() {
+  	room.child("mode").set("idle");
+  }
+  right_btn.ontouchstart = function() {
+  	room.child("mode").set("rightspin");
+  };
+  right_btn.ontouchend = function() {
+  	room.child("mode").set("idle");
+  }
   </script>
 </body>
 </html>

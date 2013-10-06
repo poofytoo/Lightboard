@@ -10,7 +10,8 @@
   </style>
 </head>
 <body>
-  <video id="video"></video>
+  <canvas id="video_canvas"></canvas>
+  <div style="position: absolute; left: 8px; width: 640px; height: 480px; top: 8px; background-color: #fff; opacity: 0.6;"></div>
   <canvas id="lightboard" width="640px" height="480px"></canvas>
   <script type="text/javascript" src="adapter.js"></script>
   <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
@@ -18,11 +19,27 @@
   <script type="text/javascript">
   var lb_firebase = new Firebase(
       "https://lightboard.firebaseIO.com");
-  var room = lb_firebase.child("hackmit");
+  var room = lb_firebase.child("hackmit-victor");
   var lightboard = new Lightboard();
-  room.child("mode").on("value", function(data) {
+  lightboard.mode = "draw";
+  /*
+room.child("mode").on("value", function(data) {
     lightboard.mode = data.val();
   });
+*/
+  document.onkeydown = checkKey;
+  function checkKey(e) {
+    e = e || window.event;
+    if (e.keyCode == '37') {
+      lightboard.redraw(5);
+    }
+    else if (e.keyCode == '39') {
+      lightboard.redraw(-5);
+    }
+    else if (e.keyCode == '32') {
+      lightboard.clear();
+    }
+  }
   </script>
 </body>
 </html>
